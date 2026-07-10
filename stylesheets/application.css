@@ -37,6 +37,18 @@
   font-weight: 500;
 }
 
+#top-menu .general-menu,
+#top-menu .top-menu__links,
+#top-menu .profile-menu {
+  display: flex;
+  align-items: center;
+}
+#top-menu svg,
+#top-menu img,
+#top-menu .avatar {
+  vertical-align: middle;
+}
+
 #top-menu #my-page-icon {
   background-image: url('data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2229%22%20height%3D%2229%22%20viewBox%3D%220%200%2024%2024%22%20style%3D%22fill%3A%20%2344546f%22%3E%3Cpath%20d%3D%22M12%202C6.579%202%202%206.579%202%2012s4.579%2010%2010%2010%2010-4.579%2010-10S17.421%202%2012%202zm0%205c1.727%200%203%201.272%203%203s-1.273%203-3%203c-1.726%200-3-1.272-3-3s1.274-3%203-3zm-5.106%209.772c.897-1.32%202.393-2.2%204.106-2.2h2c1.714%200%203.209.88%204.106%202.2C15.828%2018.14%2014.015%2019%2012%2019s-3.828-.86-5.106-2.228z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
 }
@@ -341,6 +353,15 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
   justify-content: center;
 }
 
+#top-menu #header {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+}
+
 #header h1{
   margin: 0px;
   line-height: normal;
@@ -353,6 +374,8 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
   left: unset;
   margin: 0px;
   padding: 0px;
+  width: 100%;
+  background: #ffffff;
 }
 
 #left-nav{
@@ -369,6 +392,11 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
 #main-menu ul{
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
 }
 
 #main-menu ul a{
@@ -393,6 +421,7 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
   color: #0c66e4;
   font-weight: 600;
   background-color: #e9f2ff;
+  box-shadow: none;
 }
 #main-menu li a{
   width: 100%;
@@ -400,6 +429,7 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
 
 #main-menu li.highlighted{
   background-color: #e9f2ff;
+  position: relative;
 }
 
 #sidebar{
@@ -438,6 +468,7 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
 #main-menu li a.selected:hover {
   color: #0c66e4 !important;
   background-color: #e9f2ff;
+  box-shadow: none;
 }
 
 #main-menu li a:hover {
@@ -503,17 +534,23 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
   padding: 5px 0px 5px 20px;
 }
 
+#main-menu li > svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+
 #main-menu li.highlighted::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: 4px;
-  position: relative;
+  height: 60%;
   background: var(--ds-text-selected, #0052CC);
   border-radius: 0 var(--ds-border-radius, 4px) var(--ds-border-radius, 4px) 0;
-  content: "";
-  /* inset-block-end: var(--ds-space-150, 18px);
-  inset-block-start: var(--ds-space-150, 18px); */
-  inset-inline-start: 0px;
-  height: 15px;
-  left: -15px;
 }
 
 #main-menu .menu-children {
@@ -842,6 +879,35 @@ select {
   height: 32px;
 }
 
+.ui.selection.dropdown {
+  box-sizing: border-box;
+  min-height: 32px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.ui.selection.dropdown > .dropdown.icon {
+  top: 50%;
+  margin-top: 0;
+  transform: translateY(-50%);
+}
+
+.ui.label > .delete.icon,
+.ui.multiple.dropdown > .label > .delete.icon {
+  font-family: Dropdown;
+  cursor: pointer;
+  margin-left: 0.5em;
+  opacity: 0.7;
+}
+.ui.label > .delete.icon::before,
+.ui.multiple.dropdown > .label > .delete.icon::before {
+  content: "\f00d";
+}
+.ui.label > .delete.icon:hover,
+.ui.multiple.dropdown > .label > .delete.icon:hover {
+  opacity: 1;
+}
+
 input:focus, select:focus, textarea:focus, input[type="text"]:focus, input[type="date"]:focus, input[type="password"]:focus {
   border: 2px solid #1D7AFC;
   color: #000;
@@ -973,10 +1039,14 @@ div.issue .attribute .value {
 }
 
 #main-menu .menu-title {
-  text-align: center;
-  padding: 10px 14px;
-  border-block-end: 1px solid var(--ds-border, #c0c0c0);
-  background: #c0d9ff;
+  text-align: left;
+  padding: 16px 20px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #172b4d;
+  background: #ffffff;
+  border-block-end: 1px solid #e2e4ea;
 }
 
 @media screen and (min-width: 900px) {
@@ -989,4 +1059,8 @@ div.issue .attribute .value {
   .mobile-hide {
     display: none !important;
   }
+}
+
+.top-menu__links ul {
+  align-items: center;
 }
