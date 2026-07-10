@@ -1,7 +1,12 @@
-@import url(../../../stylesheets/application.css);
+/* Redmine 7.0 (Propshaft): core CSS is served as a root logical asset.
+   Old relative path ../../../stylesheets/application.css no longer resolves. */
+@import url(/application.css);
 @import url(./fonts/roboto/roboto.css);
+/* Semantic UI (dropdown + transition) bundled locally instead of a CDN.
+   Self-contained: the dropdown caret font is embedded as a data: URI. */
+@import url(./semantic/transition.min.css);
+@import url(./semantic/dropdown.min.css);
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Oxygen:wght@300;400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
@@ -36,41 +41,82 @@
   background-image: url('data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2229%22%20height%3D%2229%22%20viewBox%3D%220%200%2024%2024%22%20style%3D%22fill%3A%20%2344546f%22%3E%3Cpath%20d%3D%22M12%202C6.579%202%202%206.579%202%2012s4.579%2010%2010%2010%2010-4.579%2010-10S17.421%202%2012%202zm0%205c1.727%200%203%201.272%203%203s-1.273%203-3%203c-1.726%200-3-1.272-3-3s1.274-3%203-3zm-5.106%209.772c.897-1.32%202.393-2.2%204.106-2.2h2c1.714%200%203.209.88%204.106%202.2C15.828%2018.14%2014.015%2019%2012%2019s-3.828-.86-5.106-2.228z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
 }
 
-div.profileicon {
+/* Profile popup: theme.js rebuilds #account as Redmine's core dropdown markup.
+   The plugin layout does not link the core dropdown.css, so a minimal copy of
+   those styles is kept here, adapted to the white top bar. */
+#account div.profileicon {
   width: 29px;
   height: 29px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   border-radius: 99em;
-  vertical-align: middle;
   background-image: url('data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2229%22%20height%3D%2229%22%20viewBox%3D%220%200%2024%2024%22%20style%3D%22fill%3A%20%2344546f%22%3E%3Cpath%20d%3D%22M12%202C6.579%202%202%206.579%202%2012s4.579%2010%2010%2010%2010-4.579%2010-10S17.421%202%2012%202zm0%205c1.727%200%203%201.272%203%203s-1.273%203-3%203c-1.726%200-3-1.272-3-3s1.274-3%203-3zm-5.106%209.772c.897-1.32%202.393-2.2%204.106-2.2h2c1.714%200%203.209.88%204.106%202.2C15.828%2018.14%2014.015%2019%2012%2019s-3.828-.86-5.106-2.228z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
-  cursor:pointer;
-  margin: 3px;
 }
 
-div#profilemenu {
-  position: absolute;
-  z-index: 999;
-  width: 135px;
-  right: 10px;
-  background-color: #FFFFFF;
-  padding: 5px 0 5px 0;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+#account.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-#profilemenu li a {
-  color: #6B778C;
-  display: block;
-  font-weight: bold;
-  padding: 6px 15px;
+#top-menu #account .dropdown-trigger {
+  display: flex;
+  align-items: center;
   cursor: pointer;
-  text-decoration:none;
-  margin-right: 0;
+  padding: 3px;
+  border-radius: 99em;
+  text-decoration: none;
 }
 
-#profilemenu li a:hover, #top-menu li a:hover, #project-jump .drdn-content a:hover,
+#account .dropdown-trigger:hover {
+  background-color: #E9EAEC;
+}
+
+#account .dropdown-content {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #FFFFFF;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  z-index: 1000;
+  min-width: 180px;
+  margin-top: 4px;
+  text-align: left;
+}
+
+#account .dropdown-content.hidden {
+  display: none;
+}
+
+#account .dropdown-content ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#top-menu #account .dropdown-content li a {
+  display: flex;
+  padding: 8px 16px;
+  margin: 0;
+  border-radius: 0;
+  font-weight: 500;
+}
+
+#account .dropdown-content .user-info {
+  padding: 10px 16px;
+  color: #1c3051;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#account .dropdown-divider {
+  border-top: 1px solid #e9ecef;
+}
+
+#top-menu li a:hover, #project-jump .drdn-content a:hover,
 #main-menu ul a:hover{
   background-color:#E9EAEC;
   text-decoration: none;
@@ -89,15 +135,13 @@ div#profilemenu {
 #topmenu-nav ul{
   display: flex;
   align-items: center;
-}
-
-#profilelist {
   list-style: none;
-  margin-top: 5px;
+  margin: 0;
+  padding: 0;
 }
 
-#profilelist li{
-  width: 100%;
+#topmenu-nav ul li{
+  list-style: none;
 }
 
 #header{
@@ -273,8 +317,7 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
   margin: 0px !important;
 }
 
-#clockINOUT:hover, #issueLog:hover, #notification:hover, #project-jump:hover,
-#userprofile:hover {
+#clockINOUT:hover, #issueLog:hover, #notification:hover, #project-jump:hover {
   background-color: #E9EAEC;
   border-radius: 25px;
 }
@@ -283,12 +326,16 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
   background-color: #E9EAEC;
 }
 
-#header{
+/* body.has-main-menu #header included to outweigh the core Redmine 7 rule
+   that adds padding-block-end: 2rem, which overflows the 56px top bar */
+#header, body.has-main-menu #header{
   min-height: unset;
   position: unset;
   padding-top: 0px;
   padding-bottom: 0px;
+  padding-block: 0;
   height: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;

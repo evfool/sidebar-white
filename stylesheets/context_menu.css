@@ -1,4 +1,5 @@
-@import url(../../../stylesheets/context_menu.css);
+/* Redmine 7.0 (Propshaft): reference the core stylesheet as a root logical asset. */
+@import url(/context_menu.css);
 
 .context-menu-selection {
   background-color:#e9f4ff !important;
