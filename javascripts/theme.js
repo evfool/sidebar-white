@@ -144,6 +144,8 @@ $(document).ready(function(){
       && $select.prop('id') != 'selected_c'
       && !(this.name.includes('column') && $select.prop('multiple')) // To skip Redmine multi selection
       && !$(this).hasClass("multi-row")
+      && !$select.hasClass('issueDD')
+      && !this.name.includes('__template__')
     ){
       $select.addClass('ui dropdown');
     }
@@ -505,6 +507,8 @@ function initDropdownUI($this){
       && this.id != 'selected_c'
       && !(this.name.includes('column') && $(this).prop('multiple')) // To skip Redmine multi selection
       && !$(this).hasClass("multi-row")
+      && !$(this).hasClass("issueDD")
+      && !this.name.includes('__template__')
     ){
       $(this).addClass('ui dropdown');
       $(this).dropdown({ placeholder: false });
