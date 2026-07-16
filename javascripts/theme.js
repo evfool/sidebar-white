@@ -624,7 +624,10 @@ function updateOtherIcons(){
 
 function updateTitlePosition() {
   const $contentH2 = $('#content h2').first();
-  const $tabs = $('#content .tabs');
+  // Page-level tab navigation only: the wiki editor's Edit/Preview bar
+  // (jstoolbar) is also class "tabs" and sits inside form fields, so the
+  // page title must never be injected in front of it.
+  const $tabs = $('#content .tabs').not('.jstTabs').first();
   const $queryFormTabs = $('#query_form .tabs');
   const $mainMenu = $('#main-menu');
   
@@ -635,12 +638,15 @@ function updateTitlePosition() {
 
   const sideNavOpen = sessionStorage.getItem("showSideNav") !== 'true';
 
+  // Create the side-nav title in both states, not only when the nav is open:
+  // pages loaded with the nav collapsed still need it so the hover flyout
+  // shows the page heading.
+  if (!$mainMenu.find('.menu-title').length && pageTitle) {
+    $mainMenu.prepend(`<div class="menu-title"><h2>${pageTitle}</h2></div>`);
+  }
+
   if (sideNavOpen) {
     // Side nav open
-    if (!$mainMenu.find('.menu-title').length && pageTitle) {
-      $mainMenu.prepend(`<div class="menu-title"><h2>${pageTitle}</h2></div>`);
-    }
-        
     if ($('#left-nav').is(':visible')) {
       $contentH2.hide();
     }
@@ -649,7 +655,12 @@ function updateTitlePosition() {
     // Side nav closed
     $contentH2.show();
     if (pageTitle && $tabs.length && !$queryFormTabs.length) {
-      $('<div class="tab-title"><h2>' + pageTitle + '</h2></div>').insertBefore($tabs);
+      const $tabTitle = $('#content .tab-title');
+      if ($tabTitle.length) {
+        $tabTitle.show();
+      } else {
+        $('<div class="tab-title"><h2>' + pageTitle + '</h2></div>').insertBefore($tabs);
+      }
       $contentH2.hide();
     }
   }
