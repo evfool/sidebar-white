@@ -135,6 +135,7 @@ $(document).ready(function(){
     if(
       !$select.hasClass('ui dropdown')
       && !$(this).hasClass("select2-hidden-accessible")
+      && !$(this).hasClass("productItemsDD") // owned by invoice.js's select2() init, not Semantic UI
       && (
         $(this).is(':visible')
         || ($select.parents('.tab-content').length > 0)
@@ -501,8 +502,9 @@ function initDropdownUI($this){
   const $allDDs = $($this).find('select');
   $allDDs.each(function(){
     if($(this).is('select')
-      // && !$(this).hasClass('ui dropdown')
+      && !$(this).hasClass('ui dropdown') // don't re-run setup on an already-initialized dropdown
       && !$(this).hasClass("select2-hidden-accessible")
+      && !$(this).hasClass("productItemsDD") // owned by invoice.js's select2() init, not Semantic UI
       && this.id != 'available_c'
       && this.id != 'selected_c'
       && !(this.name.includes('column') && $(this).prop('multiple')) // To skip Redmine multi selection
