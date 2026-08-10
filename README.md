@@ -4,11 +4,11 @@
 
 | **Redmine** | **Sidebar-white**           |
 | ----------- | --------------------------- |
-| 7.0         | 2.0                         |
+| 7.0         | 2.0, 2.1                    |
 | 6.1         | 1.3.1                       |
 | 6.0         | 1.1.2, 1.2, 1.3             |
 | 5.x         | 1.0, 1.1, 1.1.1             |
 
-Release Notes for v2.0
+Release Notes for v2.1
 
-   - Redmine 7.0 compatibility
+   - Fixed Semantic Dropdown in popups.
