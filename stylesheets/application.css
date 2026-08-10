@@ -378,6 +378,17 @@ div#clockINOUT, div#issueLog, div#notification, div#project-jump{
   background: #ffffff;
 }
 
+/* The menu is server-rendered inside #header and only relocated into #left-nav
+   by theme.js on document-ready. Until then the sidebar column styles make one
+   menu row (e.g. "Purchasing") peek through the gap between the fixed top bar
+   and #main, flashing on every page load. Hide it while still inside #header;
+   below 900px the JS never relocates it, so it must stay visible there. */
+@media (min-width: 900px) {
+  #header #main-menu {
+    display: none;
+  }
+}
+
 #left-nav{
   position: fixed;
   top: 57px;
