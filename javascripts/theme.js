@@ -124,6 +124,91 @@ const colorCodeColors = [
   { "background": "#935116", "color": "#FFFFFF" },
 ];
 
+/* --------------------------------------------------------------------------
+ * Semantic UI dropdown <-> native <select> display sync
+ * -------------------------------------------------------------------------- */
+(function () {
+  if (typeof $ === 'undefined' || !$.fn || $.fn.erpDropdownValSyncInstalled) {
+    return;
+  }
+
+  function repaintDropdownLabel(select) {
+    if (select.multiple) { return; }
+    if (!select.options.length) { return; }     // mid-rebuild — leave the label alone
+    const $drop = $(select).parent('.ui.dropdown');
+    if (!$drop.length) { return; }              // not themed — nothing to repaint
+
+    const option = select.selectedIndex >= 0 ? select.options[select.selectedIndex] : null;
+    const $text = $drop.children('.text').first();
+    if ($text.length) {
+      // Mirror whatever the <select> now holds. A blank option carries a
+      // non-breaking space as its label, which is exactly what Semantic shows
+      // for the empty choice (dropdowns here are inited with placeholder:false).
+      if (option) {
+        $text.removeClass('default').text(option.text);
+      } else {
+        $text.addClass('default').text('');
+      }
+    }
+
+    const value = option ? option.value : null;
+    $drop.children('.menu').children('.item').each(function(){
+      $(this).toggleClass('active selected', $(this).attr('data-value') === value);
+    });
+  }
+
+  let reconcilePending = false;
+  function scheduleReconcile() {
+    if (reconcilePending) { return; }
+    reconcilePending = true;
+    window.requestAnimationFrame(function () {
+      reconcilePending = false;
+      document.querySelectorAll('.ui.dropdown > select').forEach(repaintDropdownLabel);
+    });
+  }
+
+  const nativeVal = $.fn.val;
+  $.fn.val = function () {
+    const result = nativeVal.apply(this, arguments);
+    if (arguments.length) {                     // setter only — never the getter
+      for (let i = 0; i < this.length; i++) {
+        if (this[i] && this[i].nodeName === 'SELECT') {
+          scheduleReconcile();
+          break;
+        }
+      }
+    }
+    return result;
+  };
+
+  [[window.HTMLSelectElement, 'value'],
+   [window.HTMLSelectElement, 'selectedIndex'],
+   [window.HTMLOptionElement, 'selected']].forEach(function (target) {
+    const proto = target[0] && target[0].prototype;
+    const prop = target[1];
+    if (!proto) { return; }
+    const desc = Object.getOwnPropertyDescriptor(proto, prop);
+    if (!desc || !desc.set || !desc.configurable) { return; }   // leave it alone
+    Object.defineProperty(proto, prop, {
+      configurable: desc.configurable,
+      enumerable: desc.enumerable,
+      get: desc.get,
+      set: function (v) {
+        desc.set.call(this, v);
+        scheduleReconcile();
+      },
+    });
+  });
+
+  // Belt and braces for writes that happen through neither jQuery nor a plain
+  // property assignment (option nodes swapped wholesale, values restored inside
+  // an AJAX handler, a dialog populated just before it opens).
+  $(document).ajaxComplete(scheduleReconcile);
+  $(document).on('dialogopen', scheduleReconcile);
+
+  $.fn.erpDropdownValSyncInstalled = true;
+})();
+
 $(document).ready(function(){
 
   // Semantic UI (dropdown + transition) is bundled with this theme instead of
